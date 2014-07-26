@@ -1,5 +1,4 @@
-\docType{package
-Check}
+\docType{packageCheck}
 \name{moven_utility}
 \alias{moven_utility}
 \title{moven_utility.}
