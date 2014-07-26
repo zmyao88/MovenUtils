@@ -1,0 +1,15 @@
+Package: moven_utility
+Title: Utility functions for moven 
+Version: 0.1
+Authors@R: "Zaiming Yao"
+Description: Helper function to optimize clarity of code base
+Depends: R (>= 3.1.0),
+         dplyr (>= 0.2),
+         stringr (>= 0.6.2),
+         lubridate (>= 1.3.3),
+         ggplot2 (>= 1.0.0),
+         zoo (>= 1.7-11)
+                       
+License: TBD
+URL: https://github.com/zmyao88/moven_utility
+LazyData: true
