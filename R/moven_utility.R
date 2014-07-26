@@ -3,11 +3,6 @@ require(stringr)
 require(lubridate)
 require(ggplot2)
 require(zoo)
-#' moven_utility.
-#'
-#' @name moven_utility
-#' @docType package
-
 
 #' Check if the date is the Last doy of the month
 #'
@@ -76,7 +71,8 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, time_lo = 5, 
 #'
 #' @param col1 character column contain string to match.
 #' @param col2 character column contain string to match.
-#' @return A function consums a string and returns Boolean vector indicating if there is a match in the input columns or not
+#' @return A function consums a string and returns Boolean vector indicating
+#'  if there is a match in the input columns or not.
 #' @export
 contain_string <- function(col1, col2){
     function(string){

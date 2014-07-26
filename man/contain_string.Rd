@@ -11,7 +11,7 @@ contain_string(col1, col2)
 }
 \value{
 A function consums a string and returns Boolean vector
-indicating if there is a match in the input columns or not
+indicating if there is a match in the input columns or not.
 }
 \description{
 Check the transaction similarity of a user
