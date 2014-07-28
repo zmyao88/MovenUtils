@@ -61,12 +61,12 @@ eud.dist_center <- function(x1){
 similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NULL, time_lo = 5, time_up = 40){
     # create variable margin
     if(!is.null(pct_error)){ 
-        margin <- pct_error * mean(amount, na.rm = T)
+        margin <- pct_error * amount
     }
-    trans_data <- cbind(amount, date)
+    trans_data <- cbind(amount, date, margin)
     # loop through each row and return index of rows that matches criteria
     apply(trans_data, MARGIN = 1, function(data){
-        any((abs(data['amount'] - trans_data[,'amount']) <= margin) & 
+        any((abs(data['amount'] - trans_data[,'amount']) <= data['margin']) & 
             (abs(data['date'] - trans_data[,'date']) <= time_up) & 
             (abs(data['date'] - trans_data[,'date']) >= time_lo))
         
