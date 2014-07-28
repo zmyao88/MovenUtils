@@ -3,6 +3,7 @@ require(stringr)
 require(lubridate)
 require(ggplot2)
 require(zoo)
+require(fpc)
 
 #' Check if the date is the Last doy of the month
 #'
@@ -52,19 +53,25 @@ eud.dist_center <- function(x1){
 #' @param amount numeric vector of amount.
 #' @param date vector of date type.
 #' @param margin the tolerable marginal difference to consider 2 transactions are the same.
+#' @param pct_error percentile of average transaction amount as the margin.
 #' @param time_lo minimum difference between 2 transaction
 #' @param time_up maximum difference between 2 transaction
 #' @return Boolean vectors indicating if the input has a similar transaction
 #' @export
-similar_transaction_tagger <- function(amount, date, margin=0.011, time_lo = 5, time_up = 40){
+similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NULL, time_lo = 5, time_up = 40){
+    # create variable margin
+    if(!is.null(pct_error)){ 
+        margin <- pct_error * mean(amount, na.rm = T)
+    }
     trans_data <- cbind(amount, date)
     # loop through each row and return index of rows that matches criteria
     apply(trans_data, MARGIN = 1, function(data){
-        any((abs(data['amount'] - trans_data[, 'amount']) <= margin) & 
-                (abs(data['date'] - trans_data[, 'date']) <= time_up) & 
-                (abs(data['date'] - trans_data[, 'date']) >= time_lo))
+        any((abs(data['amount'] - trans_data[,'amount']) <= margin) & 
+            (abs(data['date'] - trans_data[,'date']) <= time_up) & 
+            (abs(data['date'] - trans_data[,'date']) >= time_lo))
         
-    })
+        
+    })    
 }
 
 #' Check the transaction similarity of a user
