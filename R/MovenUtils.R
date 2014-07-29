@@ -64,11 +64,12 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
         margin <- pct_error * amount
     }
     trans_data <- cbind(as.numeric(amount), as.numeric(date), margin)
+    colnames(trans_data) <- c("amount", "date", "margin")
     # loop through each row and return index of rows that matches criteria
     primary_cluster <- sapply(1:nrow(trans_data), function(i){
         idx <- which((abs(trans_data[i,'amount'] - trans_data[,'amount']) <= trans_data[i,'margin']) & 
-                         (abs(trans_data[i,'date'] - trans_data[,'date']) <= time_up) & 
-                         (abs(trans_data[i,'date'] - trans_data[,'date']) >= time_lo))
+                     (abs(trans_data[i,'date'] - trans_data[,'date']) <= time_up) & 
+                     (abs(trans_data[i,'date'] - trans_data[,'date']) >= time_lo))
         sort(c(i,idx))
         
     })
@@ -82,10 +83,8 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
             idx_puller(new_collection)
         }
     }
-    # recursively search all transactions and agglomorate indeces into 1 goup if 
-    # there's any similar transaction. 
-    # return 0 if there's none, return minimum index number as group id if otherwise
     
+    # return min idx in group as the grouping id return 0 if only 1 element in the group
     sapply(1:length(primary_cluster), function(i){
         collection <- sort(unique(unlist(primary_cluster[i])))
         if (length(collection) == 1){
@@ -93,8 +92,7 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
         }else{
             return(min(idx_puller(collection)))    
         }
-        
-    })    
+    })
 }
 
 
