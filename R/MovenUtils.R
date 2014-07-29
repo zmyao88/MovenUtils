@@ -79,7 +79,7 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
                all(new_collection == my_collection)){
             return(new_collection)
         }else{
-            puller(new_collection)
+            idx_puller(new_collection)
         }
     }
     # recursively search all transactions and agglomorate indeces into 1 goup if 
