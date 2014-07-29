@@ -56,7 +56,7 @@ eud.dist_center <- function(x1){
 #' @param pct_error percentile of average transaction amount as the margin.
 #' @param time_lo minimum difference between 2 transaction
 #' @param time_up maximum difference between 2 transaction
-#' @return Boolean vectors indicating if the input has a similar transaction
+#' @return numeric vectors indicating group id for similar transactions
 #' @export
 similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NULL, time_lo = 5, time_up = 40){
     # create variable margin
@@ -65,14 +65,38 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
     }
     trans_data <- cbind(amount, date, margin)
     # loop through each row and return index of rows that matches criteria
-    apply(trans_data, MARGIN = 1, function(data){
-        any((abs(data['amount'] - trans_data[,'amount']) <= data['margin']) & 
-            (abs(data['date'] - trans_data[,'date']) <= time_up) & 
-            (abs(data['date'] - trans_data[,'date']) >= time_lo))
+    primary_cluster <- sapply(1:nrow(trans_data), function(i){
+        idx <- which((abs(trans_data[i,'amount'] - trans_data[,'amount']) <= trans_data[i,'margin']) & 
+                         (abs(trans_data[i,'date'] - trans_data[,'date']) <= time_up) & 
+                         (abs(trans_data[i,'date'] - trans_data[,'date']) >= time_lo))
+        sort(c(i,idx))
         
+    })
+    # helper function to gather collection of idx belongs to same group
+    idx_puller <- function(my_collection){
+        new_collection <- sort(unique(c(unlist(primary_cluster[my_collection]), my_collection)))
+        if(length(new_collection)==length(my_collection) &&
+               all(new_collection == my_collection)){
+            return(new_collection)
+        }else{
+            puller(new_collection)
+        }
+    }
+    # recursively search all transactions and agglomorate indeces into 1 goup if 
+    # there's any similar transaction. 
+    # return 0 if there's none, return minimum index number as group id if otherwise
+    
+    sapply(1:length(primary_cluster), function(i){
+        collection <- sort(unique(unlist(primary_cluster[i])))
+        if (length(collection) == 1){
+            return(0)
+        }else{
+            return(min(idx_puller(collection)))    
+        }
         
     })    
 }
+
 
 #' Check the transaction similarity of a user
 #'

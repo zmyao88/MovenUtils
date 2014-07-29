@@ -21,8 +21,8 @@ similar_transaction_tagger(amount, date, margin = 0.011, pct_error = NULL,
   \item{time_up}{maximum difference between 2 transaction}
 }
 \value{
-Boolean vectors indicating if the input has a similar
-transaction
+numeric vectors indicating group id for similar
+transactions
 }
 \description{
 Check the transaction similarity of a user
