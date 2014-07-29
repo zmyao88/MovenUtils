@@ -63,7 +63,7 @@ similar_transaction_tagger <- function(amount, date, margin=0.011, pct_error=NUL
     if(!is.null(pct_error)){ 
         margin <- pct_error * amount
     }
-    trans_data <- cbind(amount, date, margin)
+    trans_data <- cbind(as.numeric(amount), as.numeric(date), margin)
     # loop through each row and return index of rows that matches criteria
     primary_cluster <- sapply(1:nrow(trans_data), function(i){
         idx <- which((abs(trans_data[i,'amount'] - trans_data[,'amount']) <= trans_data[i,'margin']) & 
