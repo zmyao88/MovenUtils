@@ -23,6 +23,31 @@ is_start_of_month <- function(date){
     return(mday(date) == 1)
 }
 
+#' Get number of days in the month of given date
+#'
+#' @param date the date in date type.
+#' @return numeric value indicating number of days
+numberOfDays <- function(date) {
+    m <- format(date, format="%m")
+    
+    while (format(date, format="%m") == m) {
+        date <- date + 1
+    }
+    
+    return(as.integer(format(date - 1, format="%d")))
+}
+
+#' Vectorized version to get number of days in the month of given date
+#'
+#' @param date_vec the date vector in date type.
+#' @return numeric vector indicating number of days in the month
+#' @export
+number_of_days <- function(date_vec) {
+    sapply(date_vec, numberOfDays)
+}
+
+
+
 #' Check if the transaction is a valid paycheck 
 #'
 #' @param income numeric vector of amount.
