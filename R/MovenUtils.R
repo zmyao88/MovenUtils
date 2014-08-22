@@ -77,25 +77,29 @@ eud.dist_center <- function(x1){
 #'
 #' @param amount numeric vector of amount.
 #' @param date vector of date type.
+#' @param trans_class category identifier of the transaction.
 #' @param margin the tolerable marginal difference to consider 2 transactions are the same.
 #' @param pct_error percentile of average transaction amount as the margin.
 #' @param time_lo minimum difference between 2 transaction
 #' @param time_up maximum difference between 2 transaction
 #' @return numeric vectors indicating group id for similar transactions
 #' @export
-sim_trans_tag <- function(amount, date, margin=0.011, pct_error=NULL, time_lo = 5, time_up = 40){
+sim_trans_tag <- function(amount, date, trans_class, margin=0.011, pct_error=NULL, time_lo = 5, time_up = 40){
     # create variable margin
     
     if(!is.null(pct_error)){ 
         margin <- pct_error * amount
     }
-    trans_data <- cbind(as.numeric(amount), as.numeric(date), margin)
-    colnames(trans_data) <- c("amount", "date", "margin")
+    trans_data <- data.frame(amount = as.numeric(amount), 
+                             date = as.numeric(date), 
+                             margin = margin, 
+                             trans_class = trans_class)
     # loop through each row and return index of rows that matches criteria
     primary_cluster <- lapply(1:nrow(trans_data), function(i){
         idx <- which((abs(trans_data[i,'amount'] - trans_data[,'amount']) <= trans_data[i,'margin']) & 
                          (abs(trans_data[i,'date'] - trans_data[,'date']) <= time_up) & 
-                         (abs(trans_data[i,'date'] - trans_data[,'date']) >= time_lo))
+                         (abs(trans_data[i,'date'] - trans_data[,'date']) >= time_lo) & 
+                         (trans_data[i,'trans_class'] == trans_data[,'trans_class']))
         sort(c(i,idx))
         
     })
