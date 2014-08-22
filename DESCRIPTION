@@ -1,8 +1,8 @@
 Package: MovenUtils
 Type: Package
 Title: Utility functions for moven
-Version: 0.0.7
-Date: 2014-07-28
+Version: 0.0.8
+Date: 2014-08-21
 Author: Zaiming Yao <i.will.not@respond.you.com>
 Maintainer: Zaiming Yao <i.will.not@respond.you.com>
 Description: Helper function to optimize performance and improve clarity of
