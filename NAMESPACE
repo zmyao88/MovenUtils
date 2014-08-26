@@ -1,4 +1,6 @@
+export(check_holiday)
 export(contain_string)
+export(days_before_holiday)
 export(eud.dist_center)
 export(get_name_tag)
 export(is_end_of_month)

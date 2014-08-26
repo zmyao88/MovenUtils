@@ -164,3 +164,51 @@ get_name_tag <- function(col1, col2){
         return(out_tags)
     }
 }
+
+
+#' Check if the date is a US holiday
+#'
+#' @param date date object.
+#' @return boolean vector/ value indicating if the input date is a holiday or not 
+#' @export
+check_holiday <- function(date){
+    library(timeDate)
+    # create year interger vector
+    my_year <- as.integer(unique(year(date)))
+    # holiday constant
+    HOLIDAY_LIST <- c("USDecorationMemorialDay", "USPresidentsDay", "USNewYearsDay", 
+                      "USInaugurationDay", "USMLKingsBirthday", "USLincolnsBirthday", 
+                      "USWashingtonsBirthday", "USMemorialDay", "USIndependenceDay", 
+                      "USLaborDay", "USColumbusDay", "USElectionDay", "USVeteransDay",
+                      "USThanksgivingDay", "USChristmasDay", "USCPulaskisBirthday", "USGoodFriday")
+    # find holidays in the corresponding year
+    my_holidays  <- as.Date(as.character(holiday(my_year, HOLIDAY_LIST)),"%Y-%m-%d")
+    # boolean indicator for holiday tagging
+    return(as.Date(date) %in%  my_holidays)   
+}
+
+
+
+#' Calculate days before the closest holiday
+#'
+#' @param date date object.
+#' @return boolean vector indicating how many days before the closest holiday the current date is.
+#' @export
+days_before_holiday <- function(date){
+    library(timeDate)
+    # holiday constant
+    HOLIDAY_LIST <- c("USDecorationMemorialDay", "USPresidentsDay", "USNewYearsDay", 
+                      "USInaugurationDay", "USMLKingsBirthday", "USLincolnsBirthday", 
+                      "USWashingtonsBirthday", "USMemorialDay", "USIndependenceDay", 
+                      "USLaborDay", "USColumbusDay", "USElectionDay", "USVeteransDay",
+                      "USThanksgivingDay", "USChristmasDay", "USCPulaskisBirthday", "USGoodFriday")
+    # create year interger vector
+    date <- income_data$date
+    my_year <- as.integer(unique(year(date)))
+    my_holidays  <- as.Date(as.character(holiday(my_year, HOLIDAY_LIST)),"%Y-%m-%d")
+    
+    sapply(date, function(d){
+        diff_b_hday <- my_holidays - d
+        as.integer(min(diff_b_hday[diff_b_hday >= 0] )) 
+    })    
+}
